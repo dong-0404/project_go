@@ -13,9 +13,10 @@ type TblEmployee struct {
 	Phone    int32  `gorm:"column:phone" json:"phone"`
 	Address  string `gorm:"column:address" json:"address"`
 	JobType  int    `gorm:"column:job_type" json:"job_type"`
-	StatusId int    `gorm:"column:status_id" json:"status_id"`
+	StatusId string `gorm:"column:status_id" json:"status_id"`
 	//CreatedAt *time.Time `gorm:"column:created_at" json:"created_at"`
 	//UpdatedAt *time.Time `gorm:"column:updated_at" json:"updated_at"`
+	EmployeeDocs *EmployeeDocs `gorm:"foreignKey: EmployeeId"`
 }
 
 func (TblEmployee) TableName() string {
@@ -23,13 +24,13 @@ func (TblEmployee) TableName() string {
 }
 
 type EmployeeDocs struct {
-	Id              int         `gorm:"column:id;autoIncrement" json:"id"`
-	EmployeeId1     int         `gorm:"column:employee_id1" json:"employee_id1"`
-	IdCard          int32       `gorm:"column:id_card" json:"id_card"`
-	JoiningDate     time.Time   `gorm:"column:joining_date" json:"joining_date"`
-	BankAccount     int64       `gorm:"column:bank_account" json:"bank_account"`
-	BankAccountInfo string      `gorm:"column:bank_account_info" json:"bank_account_info"`
-	TblEmployee     TblEmployee `gorm:"foreignKey:EmployeeId1"`
+	*gorm.Model // thay cho truong id,created_at,updated_at,deleted_at
+	//ID              int         `gorm:"column:id;autoIncrement" json:"id"`
+	EmployeeId      int       `gorm:"column:employee_id" json:"employee_id"`
+	IdCard          int32     `gorm:"column:id_card" json:"id_card"`
+	JoiningDate     time.Time `gorm:"column:joining_date" json:"joining_date"`
+	BankAccount     int64     `gorm:"column:bank_account" json:"bank_account"`
+	BankAccountInfo string    `gorm:"column:bank_account_info" json:"bank_account_info"`
 }
 
 func (EmployeeDocs) TableName() string {
