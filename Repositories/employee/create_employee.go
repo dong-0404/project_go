@@ -6,8 +6,9 @@ import (
 
 type EmployeeRepositories struct{}
 
+var db = database.GetInstance().GetDB()
+
 func (er *EmployeeRepositories) Create(data interface{}) error {
-	db := database.GetInstance().GetDB()
 	err := db.Create(data).Error
 	return err
 }

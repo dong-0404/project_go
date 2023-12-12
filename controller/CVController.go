@@ -1,36 +1,24 @@
 package controller
 
 import (
-	"demo_project/Repositories/employee"
+	"demo_project/Repositories/managerCV"
 	"demo_project/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 )
 
-var ec = employee.EmployeeRepositories{}
+var cv = managerCV.CVRepositories{}
 
-func GetEmployees(c *gin.Context) {
-	employees, err := ec.GetAll()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{
-		"data": employees,
-	})
-}
-
-func CreateEmployee(c *gin.Context) {
-	var dataInsert model.TblEmployee
+func CreateCV(c *gin.Context) {
+	var dataInsert model.TblCV
 	if err := c.ShouldBindJSON(&dataInsert); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
-	err := ec.Create(&dataInsert)
+	err := cv.Create(&dataInsert)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -40,63 +28,68 @@ func CreateEmployee(c *gin.Context) {
 	c.JSON(http.StatusOK, dataInsert)
 }
 
-func GetEmployeeByID(c *gin.Context) {
-	// Params.ByName ("Truy xuất tham số URL theo tên")
-	// strconv.Atoi (chuyển từ string->int)
-	id, err := strconv.Atoi(c.Params.ByName("id"))
-	employee, err := ec.GetByID(uint(id))
-	//employee, err := ec.GetByID(uint(id))
+func GetCVs(c *gin.Context) {
+	CVs, err := cv.GetAll()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{
-		"data": employee,
+		"data": CVs,
 	})
 }
 
-func Update(c *gin.Context) {
+func GetCVByID(c *gin.Context) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
-	employee, err := ec.GetByID(uint(id))
+	cv, err := cv.GetByID(uint(id))
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
-	if err := c.ShouldBindJSON(&employee); err != nil {
+	c.JSON(http.StatusOK, gin.H{
+		"data": cv,
+	})
+}
+
+func UpdateCv(c *gin.Context) {
+	id, err := strconv.Atoi(c.Params.ByName("id"))
+	Cv, err := cv.GetByID(uint(id))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	if err := c.ShouldBindJSON(&cv); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	err = ec.Update(uint(id), &employee)
+	err = cv.Update(uint(id), &Cv)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": true,
 	})
-
 }
 
-//var employee model.TblEmployee
-
-func Delete(c *gin.Context) {
+func DeleteCv(c *gin.Context) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
-
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
-
-	err = ec.Delete(uint(id))
+	err = cv.Delete(uint(id))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 	}
-
 	c.JSON(http.StatusOK, gin.H{"message": "deleted"})
 }

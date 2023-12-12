@@ -1,18 +1,15 @@
 package employee
 
 import (
-	"demo_project/database"
 	"demo_project/model"
 )
 
 func (er *EmployeeRepositories) Delete(id uint) error {
 	// cập nhật trạng thái trong db
-	err := er.Delete1(id)
+	err := er.UpdateStatus(id)
 	if err != nil {
 		return err
 	}
-
-	db := database.GetInstance().GetDB()
 
 	// Xoá bản ghi
 	var employee model.TblEmployee
@@ -20,9 +17,7 @@ func (er *EmployeeRepositories) Delete(id uint) error {
 	return err
 }
 
-func (er *EmployeeRepositories) Delete1(id uint) error {
-	db := database.GetInstance().GetDB()
-
+func (er *EmployeeRepositories) UpdateStatus(id uint) error {
 	// Sử dụng map để chỉ cập nhật cột 'status_id'
 	updates := map[string]interface{}{"status_id": "Deleted"}
 

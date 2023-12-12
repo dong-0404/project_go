@@ -2,7 +2,6 @@ package model
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 type TblEmployee struct {
@@ -26,11 +25,11 @@ func (TblEmployee) TableName() string {
 type EmployeeDocs struct {
 	*gorm.Model // thay cho truong id,created_at,updated_at,deleted_at
 	//ID              int         `gorm:"column:id;autoIncrement" json:"id"`
-	EmployeeId      int       `gorm:"column:employee_id" json:"employee_id"`
-	IdCard          int32     `gorm:"column:id_card" json:"id_card"`
-	JoiningDate     time.Time `gorm:"column:joining_date" json:"joining_date"`
-	BankAccount     int64     `gorm:"column:bank_account" json:"bank_account"`
-	BankAccountInfo string    `gorm:"column:bank_account_info" json:"bank_account_info"`
+	EmployeeId      int    `gorm:"column:employee_id" json:"employee_id"`
+	IdCard          int32  `gorm:"column:id_card" json:"id_card"`
+	JoiningDate     string `gorm:"column:joining_date" json:"joining_date"`
+	BankAccount     int64  `gorm:"column:bank_account" json:"bank_account"`
+	BankAccountInfo string `gorm:"column:bank_account_info" json:"bank_account_info"`
 }
 
 func (EmployeeDocs) TableName() string {
