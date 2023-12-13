@@ -2,13 +2,18 @@ package router
 
 import (
 	"demo_project/controller"
-	"demo_project/middleware"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func SetUpRouter() *gin.Engine {
 	r := gin.Default()
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"} // Adjust to the origins you want to allow
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	r.Use(cors.New(config))
+
 	r.GET("/public", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "success",
@@ -17,7 +22,7 @@ func SetUpRouter() *gin.Engine {
 
 	r.POST("/SignUp", controller.SignUp)
 	r.POST("/Login", controller.Login)
-	Employee := r.Group("/v1/api", middleware.RequireAuth)
+	Employee := r.Group("/v1/api")
 	{
 		employee := Employee.Group("employee")
 		{
