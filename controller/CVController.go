@@ -11,7 +11,7 @@ import (
 var cv = managerCV.CVRepositories{}
 
 func CreateCV(c *gin.Context) {
-	var dataInsert model.TblCV
+	var dataInsert model.TblCV1
 	if err := c.Bind(&dataInsert); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -36,9 +36,7 @@ func GetCVs(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"data": CVs,
-	})
+	c.JSON(http.StatusOK, CVs)
 }
 
 func GetCVByID(c *gin.Context) {
