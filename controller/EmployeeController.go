@@ -18,14 +18,12 @@ func GetEmployees(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"data": employees,
-	})
+	c.JSON(http.StatusOK, employees)
 }
 
 func CreateEmployee(c *gin.Context) {
 	var dataInsert model.TblEmployee
-	if err := c.ShouldBindJSON(&dataInsert); err != nil {
+	if err := c.Bind(&dataInsert); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
@@ -67,7 +65,7 @@ func Update(c *gin.Context) {
 		})
 		return
 	}
-	if err := c.ShouldBindJSON(&employee); err != nil {
+	if err := c.Bind(&employee); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

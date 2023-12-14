@@ -9,22 +9,31 @@ import (
 
 func SetUpRouter() *gin.Engine {
 	r := gin.Default()
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"*"} // Adjust to the origins you want to allow
-	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
-	r.Use(cors.New(config))
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS	"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
-	r.GET("/public", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "success",
-		})
+	// Xử lý yêu cầu OPTIONS
+	r.OPTIONS("/*any", func(c *gin.Context) {
+		c.Status(http.StatusOK)
 	})
 
-	r.POST("/SignUp", controller.SignUp)
-	r.POST("/Login", controller.Login)
-	Employee := r.Group("/v1/api")
+	public := r.Group("/public")
 	{
-		employee := Employee.Group("employee")
+		public.GET("", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{
+				"message": "success",
+			})
+		})
+	}
+
+	v1api := r.Group("/v1/api")
+	{
+		employee := v1api.Group("/employee")
 		{
 			employee.GET("", controller.GetEmployees)
 			employee.POST("/create", controller.CreateEmployee)
@@ -32,17 +41,17 @@ func SetUpRouter() *gin.Engine {
 			employee.POST("/update/:id", controller.Update)
 			employee.DELETE("/delete/:id", controller.Delete)
 		}
-	}
-	ManagerCv := r.Group("/v1/api")
-	{
-		Cv := ManagerCv.Group("cv")
+
+		cv := v1api.Group("/cv")
 		{
-			Cv.GET("", controller.GetCVs)
-			Cv.POST("/create", controller.CreateCV)
-			Cv.GET("/:id", controller.GetCVByID)
-			Cv.POST("/update/:id", controller.UpdateCv)
-			Cv.DELETE("/delete/:id", controller.DeleteCv)
+			cv.GET("", controller.GetCVs)
+			cv.POST("/create", controller.CreateCV)
+			cv.GET("/:id", controller.GetCVByID)
+			cv.POST("/update/:id", controller.UpdateCv)
+			cv.DELETE("/delete/:id", controller.DeleteCv)
 		}
 	}
+
 	return r
+
 }

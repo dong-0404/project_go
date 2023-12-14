@@ -15,7 +15,11 @@ import (
 //	}
 func (er *EmployeeRepositories) GetByID(id uint) (interface{}, error) {
 	var employee model.TblEmployee
-	err := db.First(&employee, id).Error
+	err := db.Model(&model.TblEmployee{}).
+		Preload("JobType").
+		Preload("EmployeeDocs").
+		Where("id = ?", id).
+		First(&employee).Error
 	if err != nil {
 		return nil, err
 	}

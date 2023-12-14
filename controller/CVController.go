@@ -12,7 +12,7 @@ var cv = managerCV.CVRepositories{}
 
 func CreateCV(c *gin.Context) {
 	var dataInsert model.TblCV
-	if err := c.ShouldBindJSON(&dataInsert); err != nil {
+	if err := c.Bind(&dataInsert); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})

@@ -7,12 +7,13 @@ import (
 type TblEmployee struct {
 	*gorm.Model
 	//Id        int        `gorm:"column:id;autoIncrement" json:"id"`
-	FullName string `gorm:"column:full_name" json:"full_name"`
-	Email    string `gorm:"column:email" json:"email"`
-	Phone    int32  `gorm:"column:phone" json:"phone"`
-	Address  string `gorm:"column:address" json:"address"`
-	JobType  int    `gorm:"column:job_type" json:"job_type"`
-	StatusId string `gorm:"column:status_id" json:"status_id"`
+	FullName  string  `gorm:"column:full_name" json:"full_name"`
+	Email     string  `gorm:"column:email" json:"email"`
+	Phone     int     `gorm:"column:phone" json:"phone"`
+	Address   string  `gorm:"column:address" json:"address"`
+	JobTypeId int     `gorm:"column:job_type" json:"job_type"`
+	JobType   JobType `gorm:"foreignKey:job_type;references:id"`
+	//StatusId  string  `gorm:"column:status_id" json:"status_id"`
 	//CreatedAt *time.Time `gorm:"column:created_at" json:"created_at"`
 	//UpdatedAt *time.Time `gorm:"column:updated_at" json:"updated_at"`
 	EmployeeDocs *EmployeeDocs `gorm:"foreignKey: EmployeeId"`
@@ -20,6 +21,30 @@ type TblEmployee struct {
 
 func (TblEmployee) TableName() string {
 	return "tbl_employee"
+}
+
+type TblEmployee1 struct {
+	*gorm.Model
+	//Id        int        `gorm:"column:id;autoIncrement" json:"id"`
+	FullName  string  `gorm:"column:full_name" json:"full_name"`
+	Email     string  `gorm:"column:email" json:"email"`
+	Phone     int     `gorm:"column:phone" json:"phone"`
+	Address   string  `gorm:"column:address" json:"address"`
+	JobTypeId int     `gorm:"column:job_type" json:"job_type"`
+	JobType   JobType `gorm:"foreignKey:job_type;references:id"`
+	StatusId  string  `gorm:"column:status_id" json:"status_id"`
+	//CreatedAt *time.Time `gorm:"column:created_at" json:"created_at"`
+	//UpdatedAt *time.Time `gorm:"column:updated_at" json:"updated_at"`
+	EmployeeDocs *EmployeeDocs `gorm:"foreignKey: EmployeeId"`
+}
+
+func (TblEmployee1) TableName() string {
+	return "tbl_employee"
+}
+
+type JobType struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 type EmployeeDocs struct {
@@ -36,12 +61,11 @@ func (EmployeeDocs) TableName() string {
 	return "Employee_docs"
 }
 
-type jobType struct {
-	Int  int    `json:"id"`
-	Name string `json:"name"`
+func (JobType) TableName() string {
+	return "tbl_job_type"
 }
 
-type statusJob struct {
-	Int  int    `json:"id"`
-	Name string `json:"name"`
-}
+//type statusJob struct {
+//	Int  int    `json:"id"`
+//	Name string `json:"name"`
+//}
