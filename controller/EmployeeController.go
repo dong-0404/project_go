@@ -58,21 +58,28 @@ func GetEmployeeByID(c *gin.Context) {
 
 func Update(c *gin.Context) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
-	employee, err := ec.GetByID(uint(id))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
-		return
 	}
-	if err := c.Bind(&employee); err != nil {
+	//employee, err := ec.GetByID(uint(id))
+	//if err != nil {
+	//	c.JSON(http.StatusBadRequest, gin.H{
+	//		"error": err.Error(),
+	//	})
+	//	return
+	//}
+	var dataEmployee model.TblEmployee
+	if err := c.ShouldBindJSON(&dataEmployee); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	err = ec.Update(uint(id), &employee)
+	err = ec.Update(uint(id), &dataEmployee)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": true,
+		"data":    dataEmployee,
 	})
 
 }
