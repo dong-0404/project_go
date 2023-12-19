@@ -23,7 +23,7 @@ func GetEmployees(c *gin.Context) {
 
 func CreateEmployee(c *gin.Context) {
 	var dataInsert model.TblEmployee
-	if err := c.Bind(&dataInsert); err != nil {
+	if err := c.BindJSON(&dataInsert); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
@@ -62,26 +62,39 @@ func Update(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
-	//employee, err := ec.GetByID(uint(id))
-	//if err != nil {
-	//	c.JSON(http.StatusBadRequest, gin.H{
-	//		"error": err.Error(),
-	//	})
-	//	return
-	//}
-	var dataEmployee model.TblEmployee
-	if err := c.ShouldBindJSON(&dataEmployee); err != nil {
+	type dataUpdate struct {
+		dataEmployee     model.TblEmployee  `json:"dataEmployee"`
+		dataEmployeeDocs model.EmployeeDocs `json:"dataEmployeeDocs"`
+	}
+
+	var UpdateEmployee dataUpdate = dataUpdate{}
+
+	if err := c.ShouldBindJSON(&UpdateEmployee); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	err = ec.Update(uint(id), &dataEmployee)
+
+	// Cập nhật thông tin cho bảng tbl_employee
+	//requestData.EmployeeInfo.ID = uint(id)
+	err = ec.UpdateEmployeeInfo(id, &UpdateEmployee.dataEmployee)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Cập nhật thông tin cho bảng employeeDocs
+	err = ec.UpdateEmployeeDocs(id, &UpdateEmployee.dataEmployeeDocs)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": true,
-		"data":    dataEmployee,
+		"data":    UpdateEmployee,
 	})
-
 }
 
 //var employee model.TblEmployee

@@ -4,10 +4,10 @@ import "gorm.io/gorm"
 
 type TblCV struct {
 	*gorm.Model
-	FullName          string            `gorm:"column:full_name" json:"full_name"`
-	JobId             int8              `gorm:"column:job_id" json:"job_id"`
-	Status            string            `gorm:"column:status" json:"status"`
-	JobTypeId         int               `gorm:"column:job_id" json:"job_id"`
+	FullName string `gorm:"column:full_name" json:"full_name"`
+	JobId    int8   `gorm:"column:job_id" json:"job_id"`
+	Status   string `gorm:"column:status" json:"status"`
+	//JobTypeId int    `gorm:"column:job_id" json:"job_id"`
 	JobType           JobType           `gorm:"foreignKey:job_id;references:id"`
 	PersonalInfo      PersonalInfo      `gorm:"foreignKey: CvId"`
 	PersonalEducation PersonalEducation `gorm:"foreignKey: CvId"`
@@ -16,10 +16,10 @@ type TblCV struct {
 
 type TblCV1 struct {
 	*gorm.Model
-	FullName          string            `gorm:"column:full_name" json:"full_name"`
-	JobId             int8              `gorm:"column:job_id" json:"job_id"`
-	JobTypeId         int               `gorm:"column:job_id" json:"job_id"`
-	JobType           JobType           `gorm:"foreignKey:job_id;references:id"`
+	FullName string `gorm:"column:full_name" json:"full_name"`
+	JobId    int8   `gorm:"column:job_id" json:"job_id"`
+	//JobTypeId int    `gorm:"column:job_id" json:"job_id"`
+	//JobType           JobType           `gorm:"foreignKey:job_id;references:id"`
 	PersonalInfo      PersonalInfo      `gorm:"foreignKey: CvId"`
 	PersonalEducation PersonalEducation `gorm:"foreignKey: CvId"`
 	PersonalProject   PersonalProject   `gorm:"foreignKey: CvId"`

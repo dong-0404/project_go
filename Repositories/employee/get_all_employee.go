@@ -24,7 +24,10 @@ import (
 
 func (er *EmployeeRepositories) GetAll() ([]model.TblEmployee1, error) {
 	var employees []model.TblEmployee1
-	err := db.Model(&model.TblEmployee1{}).Preload("JobType").Find(&employees).Error
+	err := db.Model(&model.TblEmployee1{}).
+		Preload("EmployeeDocs").
+		Preload("JobType").
+		Find(&employees).Error
 	if err != nil {
 		return nil, err
 	}

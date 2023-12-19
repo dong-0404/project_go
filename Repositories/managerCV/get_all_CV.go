@@ -7,7 +7,7 @@ import (
 func (cv *CVRepositories) GetAll() ([]model.TblCV, error) {
 	var CVs []model.TblCV
 
-	err := db.Model(&model.TblCV{}).
+	err := db.Model(model.TblCV{}).
 		Preload("PersonalInfo").
 		Preload("JobType").
 		Preload("PersonalEducation").

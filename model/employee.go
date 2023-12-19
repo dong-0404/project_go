@@ -7,15 +7,12 @@ import (
 type TblEmployee struct {
 	*gorm.Model
 	//Id        int        `gorm:"column:id;autoIncrement" json:"id"`
-	FullName  string  `gorm:"column:full_name" json:"full_name"`
-	Email     string  `gorm:"column:email" json:"email"`
-	Phone     int     `gorm:"column:phone" json:"phone"`
-	Address   string  `gorm:"column:address" json:"address"`
-	JobTypeId int     `gorm:"column:job_type" json:"job_type"`
-	JobType   JobType `gorm:"foreignKey:job_type;references:id"`
-	//StatusId  string  `gorm:"column:status_id" json:"status_id"`
-	//CreatedAt *time.Time `gorm:"column:created_at" json:"created_at"`
-	//UpdatedAt *time.Time `gorm:"column:updated_at" json:"updated_at"`
+	FullName     string        `gorm:"column:full_name" json:"full_name"`
+	Email        string        `gorm:"column:email" json:"email"`
+	Phone        int           `gorm:"column:phone" json:"phone"`
+	Address      string        `gorm:"column:address" json:"address"`
+	JobTypeId    int           `gorm:"column:job_type" json:"job_type"`
+	JobType      JobType       `gorm:"foreignKey:job_type;references:id"`
 	EmployeeDocs *EmployeeDocs `gorm:"foreignKey: EmployeeId"`
 }
 
@@ -35,7 +32,7 @@ type TblEmployee1 struct {
 	StatusId  string  `gorm:"column:status_id" json:"status_id"`
 	//CreatedAt *time.Time `gorm:"column:created_at" json:"created_at"`
 	//UpdatedAt *time.Time `gorm:"column:updated_at" json:"updated_at"`
-	EmployeeDocs *EmployeeDocs `gorm:"foreignKey: EmployeeId"`
+	EmployeeDocs *EmployeeDocs `gorm:"foreignKey: employee_id"`
 }
 
 func (TblEmployee1) TableName() string {

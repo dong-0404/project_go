@@ -56,22 +56,21 @@ func GetCVByID(c *gin.Context) {
 
 func UpdateCv(c *gin.Context) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
-	Cv, err := cv.GetByID(uint(id))
-
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
-		return
 	}
-	if err := c.ShouldBindJSON(&cv); err != nil {
+	var CvUpdate model.TblCV1
+	if err := c.ShouldBindJSON(&CvUpdate); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	err = cv.Update(uint(id), &Cv)
+	err = cv.Update(uint(id), &CvUpdate)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": true,
+		"data":    CvUpdate,
 	})
 }
 
@@ -90,4 +89,17 @@ func DeleteCv(c *gin.Context) {
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "deleted"})
+}
+func AccessCv(c *gin.Context) {
+	id, err := strconv.Atoi(c.Params.ByName("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	err = cv.AccessCv(uint(id))
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Access successfully",
+	})
 }

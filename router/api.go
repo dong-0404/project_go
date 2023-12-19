@@ -48,6 +48,7 @@ func SetUpRouter() *gin.Engine {
 			cv.POST("/create", controller.CreateCV)
 			cv.GET("/:id", controller.GetCVByID)
 			cv.POST("/update/:id", controller.UpdateCv)
+			cv.POST("/accessCv/:id", controller.AccessCv)
 			cv.DELETE("/delete/:id", controller.DeleteCv)
 		}
 	}
